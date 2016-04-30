@@ -1,0 +1,54 @@
+{
+"cars" : {
+   "Maruti" : {
+      "Alto" : { "variant": "vxi", "doors" : 4, "transmission" : "manual", "id": "m1", "price": 5000},
+	  "AStar" : { "variant": "vxi", "doors" : 4, "transmission" : "manual", "id": "m2", "price": 6000},
+	  "Ritz" : { "variant": "vdi", "doors ": 4, "transmission" : "manual", "id": "m3", "price": 10000},
+	  "Swift" : { "variant": "ldi", "doors" : 4, "transmission" : "manual", "id": "m4", "price": 14000},
+	  "Baleno" : { "variant": "zdi", "doors" : 4, "transmission" : "manual", "id": "m5", "price": 35000},
+	  "SCross" : { "variant": "vdi", "doors" : 4, "transmission" : "Automatic", "id": "m6", "price": 25000},
+	  "Ertiga" : { "variant": "lxi", "doors" : 4, "transmission" : "manual", "id": "m7", "price": 15000},
+	  "Waganor" : { "variant": "zxi", "doors" : 4, "transmission" : "manual", "id": "m8", "price": 9000}
+   },
+   "Nissan": {
+            "Micra": {"variant": "vdi", "doors": 4, "transmission":"automatic", "id": "n1", "price":9000},
+            "Terrano": {"variant": "zxi", "doors": 4, "transmission":"automatic", "id": "n2", "price":25000}
+        },
+   "Ford": {
+            "Taurus": {"variant": "vxi", "doors":4, "transmission":"automatic", "id": "f1", "price":15000},
+            "Escort": {"variant": "vxi", "doors":4, "transmission":"automatic", "id": "f2", "price":20000}
+       },
+   "Hundai" : {
+      "getz" : { "variant": "vxi", "doors ": 4, "transmission" : "manual", "id": "h1", "price":15000},
+	  "Santro" : { "variant": "vxi", "doors" : 4, "transmission" : "manual", "id": "h2", "price":9000},
+	  "i10" : { "variant": "vdi", "doors" : 4, "transmission" : "manual", "id": "h3", "price":34000},
+	  "i20" : { "variant": "ldi", "doors" : 4, "transmission" : "manual", "id": "h4", "price":20000},
+	  "verna" : { "variant": "zdi", "doors" : 4, "transmission" : "manual", "id": "h5", "price":30000}
+   },
+   "Mahindra" : {
+       "xuv" : { "variant": "vxi", "doors" : 4, "transmission" : "manual", "id": "mm1", "price":45000},
+	  "kuv" : { "variant": "vxi", "doors" : 4, "transmission" : "manual", "id": "mm2", "price":15000}
+   },
+   "Tata" : {
+      "indica" : { "variant": "vxi", "doors" : 4, "transmission" : "manual", "id": "t1", "price":5000},
+	  "nano" : { "variant": "vxi", "doors" : 4, "transmission" : "manual", "id": "t2", "price":3000},
+	  "indigo" : { "variant": "vdi", "doors" : 4, "transmission" : "manual", "id": "t3", "price":7000},
+	  "sumo" : { "variant": "ldi", "doors" : 4, "transmission" : "manual", "id": "t4", "price":9000},
+	  "aria" : { "variant": "zdi", "doors" : 4, "transmission" : "manual", "id": "t5", "price":25000}
+   },
+   "Tayota" : {
+      "innova" : { "variant": "vxi", "doors" : 4, "transmission" : "manual", "id": "ty1", "price":45000},
+	  "fortunar" : { "variant": "vxi", "doors" : 4, "transmission" : "manual", "id": "ty2", "price":35000},
+	  "carola" : { "variant": "vdi", "doors" : 4, "transmission" : "manual", "id": "ty3", "price":29000},
+	  "camry" : { "variant": "ldi", "doors" : 4, "transmission" : "manual", "id": "ty4", "price":45000},
+	  "xxx" : { "variant": "zdi", "doors" : 4, "transmission" : "manual", "id": "ty5", "price":65000}
+   },
+   
+   "Renault" : {
+      "duster" : { "variant": "vxi", "doors" : 4, "transmission" : "manual", "id": "r1", "price":45000},
+	  "kidz" : { "variant": "vxi", "doors" : 4, "transmission" : "manual", "id": "r2", "price":15000},
+	  "l0dge" : { "variant": "vdi", "doors" : 4, "transmission" : "manual", "id": "r3", "price":45000}
+	}
+     
+  }
+}
