@@ -24,11 +24,13 @@ var nano = require('nano')('https://c8471542-8b25-4c18-8533-68457a121a4e-bluemix
 				var	  dbname = 'quotestore';
 				var manufacturerdbname = 'manufacturers';
 				var modelsdbname = 'models';
+				var citydbname = 'city';
 					var  db = null;
 					var manufacturerdb = null;
 					var modelsdb = nano.db.use(modelsdbname);
 					var  db = cloudant.db.use(dbname);
 					var manufacturerdb = nano.db.use(manufacturerdbname);
+					var citydb = nano.db.use(citydbname);
 					
 
 var bodyParser = require('body-parser');
@@ -144,3 +146,22 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 	});
 	
 	
+/***************************************************************************************/
+//Retrieve All Cities
+/***************************************************************************************/ 
+
+	 app.get('/api/getallcities', urlencodedParser, function (req, res) {
+		
+		citydb.view('retrieveAllCities', 'retrieveAllCities', function(err, body)
+		{
+			if (!err) {
+		    var result = [];
+		      body.rows.forEach(function(doc) {
+		        result.push({id: doc.key, city_name: doc.value});
+		        
+		      });
+		      res.send(JSON.stringify(result));
+    }
+		});
+		
+	});
