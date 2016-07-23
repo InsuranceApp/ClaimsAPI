@@ -85,7 +85,7 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 	var manufacturer_name = request.manufacturer_name;
 	 console.log("Manufacturer Name",manufacturer_name);
 
-		vaehiclesdb.view('retrieveVehicle', 'retrieveVehicle', {key : manufacturer_name} , function(err, body)
+		vehiclesdb.view('retrieveVehicle', 'retrieveVehicle', {key : manufacturer_name} , function(err, body)
 		{
 			if (!err) {
 		
