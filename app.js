@@ -25,13 +25,14 @@ var nano = require('nano')('https://c8471542-8b25-4c18-8533-68457a121a4e-bluemix
 				var manufacturerdbname = 'manufacturers';
 				var modelsdbname = 'models';
 				var citydbname = 'city';
+				var vehiclesdbname = 'vehicles';
 					var  db = null;
 					var manufacturerdb = null;
 					var modelsdb = nano.db.use(modelsdbname);
 					var  db = cloudant.db.use(dbname);
 					var manufacturerdb = nano.db.use(manufacturerdbname);
 					var citydb = nano.db.use(citydbname);
-					
+					var vaehiclesdb = nano.db.use(vehiclesdbname);
 
 var bodyParser = require('body-parser');
 
@@ -74,27 +75,61 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 
  app.post('/api/createquote', urlencodedParser, function (req, res) {
 	
-							console.log("Initial Request:", req.body);
+	console.log("Initial Request:", req.body);
 					 
 					
 					 var request = req.body;
-					  console.log("Creating document 'mydoc'");
-					  // we are specifying the id of the document so we can update and delete it later
-					  db.insert(request, function(err, data) {
-						console.log("Inserting into DB");
-						console.log("Error:", err);
-						console.log("Data:", data);
+					  console.log("Inserting",request);
+		
+	
+	var manufacturer_name = request.manufacturer_name;
+	 console.log("Manufacturer Name",manufacturer_name);
+
+		vaehiclesdb.view('retrieveVehicle', 'retrieveVehicle', {key : manufacturer_name} , function(err, body)
+		{
+			if (!err) {
+		
+		    
+		      body.rows.forEach(function(doc) {
+		      	console.log("Doc from DB ", doc);
+		      	if(request.model == doc.value.model_name)
+		      	{
+		      			console.log("Inserting into DB");
+		      			db.insert(request, function(err, data) {
 						var id = data.id;
 						console.log("ID" , id);
-						var result =[];
-						result.push({price: '10,000', idv: '5,000'});
-		  				res.send(JSON.stringify(result));
-							
-					  });
-				
-				
+						var response = request;
+						var Idv = doc.value.idv;
+						console.log("IDV" , Idv);
+						var Premium = Number(Idv) * 0.02;
+						 var Tax = Premium * 0.1;
+						console.log("Premium Value", Premium);
+						response.Premium = Premium;
+						response.IDV = Idv;
+						response.QuoteID = id;
+						response.Tax= Tax;
+						console.log("Response", response);
+		  				res.end(JSON.stringify(response));
+								  				
+		      		
+		      	});
+		        
+	        }
+	        else
+	        {
+	        	
+	        	console.log("Invalid Vehicle details to calculate premium");
+	        	
+	        }
+						  				
+		        
+		      });
+		      
+    }
+		});
+		
+	});
 
-});
 
 
 /***************************************************************************************/
@@ -108,7 +143,7 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 			if (!err) {
 		    var result = [];
 		      body.rows.forEach(function(doc) {
-		        result.push({id: doc.key, manufacturer_name: doc.value});
+		        result.push({manufacturer_id: doc.key, manufacturer_name: doc.value});
 		        
 		      });
 		      res.send(JSON.stringify(result));
@@ -136,10 +171,12 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 		    
 		      body.rows.forEach(function(doc) {
 		      	console.log("Doc from DB ", doc);
-		        result.push({id: doc.id, manufacturer_name: doc.key, model_name: doc.value.model});
+		        result.push({model_id: doc.id, manufacturer_name: doc.key, model_name: doc.value.model_name, cubic_capacity: doc.value.cubic_capacity, showroom_price:doc.value.showroom_price});
+		        
 		        
 		      });
 		      res.send(JSON.stringify(result));
+		      // res.send(body);
     }
 		});
 		
@@ -150,14 +187,14 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 //Retrieve All Cities
 /***************************************************************************************/ 
 
-	 app.get('/api/getallcities', urlencodedParser, function (req, res) {
+  app.get('/api/getallcities', urlencodedParser, function (req, res) {
 		
 		citydb.view('retrieveAllCities', 'retrieveAllCities', function(err, body)
 		{
 			if (!err) {
 		    var result = [];
 		      body.rows.forEach(function(doc) {
-		        result.push({id: doc.key, city_name: doc.value});
+		        result.push({city_id: doc.key, city_name: doc.value});
 		        
 		      });
 		      res.send(JSON.stringify(result));
@@ -165,3 +202,7 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 		});
 		
 	});
+	
+	
+
+		
