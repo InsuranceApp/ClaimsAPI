@@ -218,7 +218,7 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 		    var result = [];
 		      body.rows.forEach(function(doc) {
 		      	console.log("Doc from DB ", doc);
-		        result.push({coverage_id: doc.id, coverage_name: doc.key, covergae_value: doc.value.coverage_value});
+		        result.push({coverage_id: doc.id, coverage_name: doc.key, coverage_value: doc.value.coverage_value});
 		        
 		      });
 		      res.send(JSON.stringify(result));
