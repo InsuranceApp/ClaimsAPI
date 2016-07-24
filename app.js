@@ -99,6 +99,7 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 		      			console.log("Inserting into DB");
 		      			db.insert(request, function(err, data) {
 						var id = data.id;
+						var rev = data.rev;
 						console.log("ID" , id);
 						var response = request;
 						var Idv = doc.value.idv;
@@ -110,6 +111,7 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 						response.IDV = Idv;
 						response.QuoteID = id;
 						response.Tax= Tax;
+						response.REV = rev;
 						console.log("Response", response);
 		  				res.end(JSON.stringify(response));
 								  				
