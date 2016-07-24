@@ -26,6 +26,7 @@ var nano = require('nano')('https://c8471542-8b25-4c18-8533-68457a121a4e-bluemix
 				var modelsdbname = 'models';
 				var citydbname = 'city';
 				var vehiclesdbname = 'vehicles';
+				var coveragesdbname = 'coverages';
 					var  db = null;
 					var manufacturerdb = null;
 					var modelsdb = nano.db.use(modelsdbname);
@@ -33,6 +34,7 @@ var nano = require('nano')('https://c8471542-8b25-4c18-8533-68457a121a4e-bluemix
 					var manufacturerdb = nano.db.use(manufacturerdbname);
 					var citydb = nano.db.use(citydbname);
 					var vaehiclesdb = nano.db.use(vehiclesdbname);
+					var coveragesdb = nano.db.use(coveragesdbname);
 
 var bodyParser = require('body-parser');
 
@@ -203,6 +205,27 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 		
 	});
 	
+/***************************************************************************************/
+//Retrieve All Additional Coverages
+/***************************************************************************************/ 
+
+ app.get('/api/getallcoverages', urlencodedParser, function (req, res) {
 	
+
+	coveragesdb.view('getAllCoverages', 'getAllCoverages', function(err, body)
+		{
+			if (!err) {
+		    var result = [];
+		      body.rows.forEach(function(doc) {
+		      	console.log("Doc from DB ", doc);
+		        result.push({coverage_id: doc.id, coverage_name: doc.key, covergae_value: doc.value.coverage_value});
+		        
+		      });
+		      res.send(JSON.stringify(result));
+    }
+		});
+		
+	});
+      				
 
 		
