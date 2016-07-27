@@ -33,7 +33,7 @@ var nano = require('nano')('https://c8471542-8b25-4c18-8533-68457a121a4e-bluemix
 					var  db = cloudant.db.use(dbname);
 					var manufacturerdb = nano.db.use(manufacturerdbname);
 					var citydb = nano.db.use(citydbname);
-					var vaehiclesdb = nano.db.use(vehiclesdbname);
+					var vehiclesdb = nano.db.use(vehiclesdbname);
 					var coveragesdb = nano.db.use(coveragesdbname);
 
 var bodyParser = require('body-parser');
