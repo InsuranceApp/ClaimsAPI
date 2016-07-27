@@ -75,7 +75,7 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 // Quote creation
 /***************************************************************************************/ 
 
- app.post('/api/createquote', urlencodedParser, function (req, res) {
+ app.post('/api/quickQuote', urlencodedParser, function (req, res) {
 	
 	console.log("Initial Request:", req.body);
 					 
@@ -140,7 +140,7 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 //Retrieve All Manufacturers
 /***************************************************************************************/ 
 
-	 app.get('/api/getallmanufacturers', urlencodedParser, function (req, res) {
+	 app.get('/api/getAllManufacturers', urlencodedParser, function (req, res) {
 		
 		manufacturerdb.view('retrieveAllManufacturers', 'retrieveAllManufacturers', function(err, body)
 		{
@@ -191,7 +191,7 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 //Retrieve All Cities
 /***************************************************************************************/ 
 
-  app.get('/api/getallcities', urlencodedParser, function (req, res) {
+  app.get('/api/getAllCities', urlencodedParser, function (req, res) {
 		
 		citydb.view('retrieveAllCities', 'retrieveAllCities', function(err, body)
 		{
@@ -211,7 +211,7 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 //Retrieve All Additional Coverages
 /***************************************************************************************/ 
 
- app.get('/api/getallcoverages', urlencodedParser, function (req, res) {
+ app.get('/api/getAllCoverages', urlencodedParser, function (req, res) {
 	
 
 	coveragesdb.view('getAllCoverages', 'getAllCoverages', function(err, body)
@@ -234,7 +234,7 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 // Insertion of Final Quote
 /***************************************************************************************/ 
 
- app.put('/api/buyquote', urlencodedParser,function (req, res) {
+ app.put('/api/buyQuote', urlencodedParser,function (req, res) {
 	
 		console.log("Initial Request:", req.body);
 					 
