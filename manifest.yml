@@ -3,6 +3,6 @@ applications:
   memory: 256M
   instances: 1
   domain: au-syd.mybluemix.net
-  name: nodejstest
-  host: cloudantnodejstest
+  name: insureassist
+  host: insureassist
   disk_quota: 1024M
