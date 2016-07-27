@@ -92,7 +92,7 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 			if (!err) {
 		
 		    
-		      body.rows.forEach(function(doc) {
+		     body.rows.forEach(function(doc) {
 		      	console.log("Doc from DB ", doc);
 		      	if(request.model == doc.value.model_name)
 		      	{
@@ -109,9 +109,9 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 						console.log("Premium Value", Premium);
 						response.Premium = Premium;
 						response.IDV = Idv;
-						response.QuoteID = id;
+						response._id = id;
 						response.Tax= Tax;
-						response.REV = rev;
+						response._rev = rev;
 						console.log("Response", response);
 		  				res.end(JSON.stringify(response));
 								  				
@@ -230,4 +230,59 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 	});
       				
 
+/***************************************************************************************/
+// Insertion of Final Quote
+/***************************************************************************************/ 
+
+ app.put('/api/buyquote', urlencodedParser,function (req, res) {
+	
+		console.log("Initial Request:", req.body);
+					 
+					
+					 var request = req.body;
+					  console.log("Inserting",request);
+		
+	
+	var manufacturer_name = request.manufacturer_name;
+	 console.log("Manufacturer Name",manufacturer_name);
+
+		vehiclesdb.view('retrieveVehicle', 'retrieveVehicle', {key : manufacturer_name} , function(err, body)
+		{
+			if (!err) {
+		
+		    
+		      body.rows.forEach(function(doc) {
+		      	console.log("Doc from DB ", doc);
+		      	if(request.model == doc.value.model_name)
+		      	{
+		      			console.log("Inserting into DB");
+		      			db.insert(request, function(err, data) {
+		      			console.log("Data from DB",data);
+						var id = data.id;
+						var rev = data.rev;
+						console.log("ID" , id);
+						var response = request;
+						response._id = id;
+						response._rev = rev;
+						console.log("Response", response);
+		  				res.end(JSON.stringify(response));
+								  				
+		      		
+		      	});
+		        
+	        }
+	        else
+	        {
+	        	
+	        	console.log("Invalid Vehicle details to calculate premium");
+	        	
+	        }
+						  				
+		        
+		      });
+		      
+    }
+		});
+		
+	});
 		
