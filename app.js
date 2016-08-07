@@ -3,7 +3,7 @@
 /**
  * @author Madhurya Malladi
  
- * Created on 11/05/2016
+ * Created on 07/08/2016
  */
 
 //------------------------------------------------------------------------------
@@ -21,21 +21,14 @@ var cloudant = Cloudant({url: 'https://c8471542-8b25-4c18-8533-68457a121a4e-blue
 var nano = require('nano')('https://c8471542-8b25-4c18-8533-68457a121a4e-bluemix:98b2d738277220eede0580c59102e6574d39cabe6d08ba57e5f6d3a5d8555aab@c8471542-8b25-4c18-8533-68457a121a4e-bluemix.cloudant.com');
 
  //Database operations
-				var	  dbname = 'quotestore';
-				var manufacturerdbname = 'manufacturers';
-				var modelsdbname = 'models';
-				var citydbname = 'city';
-				var vehiclesdbname = 'vehicles';
-				var coveragesdbname = 'coverages';
+					var	  dbname = 'quotestore';
+					var claimdbase ='claimdatabase';
+					var claimSearchDBName = 'claimdatabase';
 					var  db = null;
-					var manufacturerdb = null;
-					var modelsdb = nano.db.use(modelsdbname);
 					var  db = cloudant.db.use(dbname);
-					var manufacturerdb = nano.db.use(manufacturerdbname);
-					var citydb = nano.db.use(citydbname);
-					var vehiclesdb = nano.db.use(vehiclesdbname);
-					var coveragesdb = nano.db.use(coveragesdbname);
-
+					var claimdb = nano.db.use(claimdbase);
+					var claimSearchDB = nano.db.use(claimSearchDBName);
+					
 var bodyParser = require('body-parser');
 
 
@@ -70,219 +63,92 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 
 
 
-
 /***************************************************************************************/
-// Quote creation
+// Create Claim
 /***************************************************************************************/ 
 
- app.post('/api/quickQuote', urlencodedParser, function (req, res) {
+ app.post('/api/createclaim', urlencodedParser, function (req, res) {
 	
-	console.log("Initial Request:", req.body);
+							console.log("Initial Request:", req.body);
 					 
 					
 					 var request = req.body;
-					  console.log("Inserting",request);
-		
-	
-	var manufacturer_name = request.manufacturer_name;
-	 console.log("Manufacturer Name",manufacturer_name);
-
-		vehiclesdb.view('retrieveVehicle', 'retrieveVehicle', {key : manufacturer_name} , function(err, body)
-		{
-			if (!err) {
-		
-		    
-		     body.rows.forEach(function(doc) {
-		      	console.log("Doc from DB ", doc);
-		      	if(request.model == doc.value.model_name)
-		      	{
-		      			console.log("Inserting into DB");
-		      			db.insert(request, function(err, data) {
+					  console.log("Creating document 'mydoc'");
+					  // we are specifying the id of the document so we can update and delete it later
+					  claimdb.insert(request, function(err, data) {
+						console.log("Inserting into DB");
+						console.log("Error:", err);
+						console.log("Data:", data);
 						var id = data.id;
-						var rev = data.rev;
-						console.log("ID" , id);
-						var response = request;
-						var Idv = doc.value.idv;
-						console.log("IDV" , Idv);
-						var Premium = Number(Idv) * 0.02;
-						 var Tax = Premium * 0.1;
-						console.log("Premium Value", Premium);
-						response.Premium = Premium;
-						response.IDV = Idv;
-						response._id = id;
-						response.Tax= Tax;
-						response._rev = rev;
-						console.log("Response", response);
-		  				res.end(JSON.stringify(response));
-								  				
-		      		
-		      	});
-		        
-	        }
-	        else
-	        {
-	        	
-	        	console.log("Invalid Vehicle details to calculate premium");
-	        	
-	        }
-						  				
-		        
-		      });
-		      
-    }
-		});
-		
-	});
-
-
-
-/***************************************************************************************/
-//Retrieve All Manufacturers
-/***************************************************************************************/ 
-
-	 app.get('/api/getAllManufacturers', urlencodedParser, function (req, res) {
-		
-		manufacturerdb.view('retrieveAllManufacturers', 'retrieveAllManufacturers', function(err, body)
-		{
-			if (!err) {
-		    var result = [];
-		      body.rows.forEach(function(doc) {
-		        result.push({manufacturer_id: doc.key, manufacturer_name: doc.value});
-		        
-		      });
-		      res.send(JSON.stringify(result));
-    }
-		});
-		
-	});
-	
-	
-/***************************************************************************************/
-//Retrieve All Models
-/***************************************************************************************/ 
-
-	 app.get('/api/getModel/:manufacturer_name', urlencodedParser, function (req, res) {
-		
-	
-	console.log("Parameters from request", req.params.manufacturer_name);
-	
-	var manufacturer_name = req.params.manufacturer_name;
-
-		modelsdb.view('retrieveModel', 'retrieveModel', {key : manufacturer_name} , function(err, body)
-		{
-			if (!err) {
-		    var result = [];
-		    
-		      body.rows.forEach(function(doc) {
-		      	console.log("Doc from DB ", doc);
-		        result.push({model_id: doc.id, manufacturer_name: doc.key, model_name: doc.value.model_name, cubic_capacity: doc.value.cubic_capacity, showroom_price:doc.value.showroom_price});
-		        
-		        
-		      });
-		      res.send(JSON.stringify(result));
-		      // res.send(body);
-    }
-		});
-		
-	});
-	
-	
-/***************************************************************************************/
-//Retrieve All Cities
-/***************************************************************************************/ 
-
-  app.get('/api/getAllCities', urlencodedParser, function (req, res) {
-		
-		citydb.view('retrieveAllCities', 'retrieveAllCities', function(err, body)
-		{
-			if (!err) {
-		    var result = [];
-		      body.rows.forEach(function(doc) {
-		        result.push({city_id: doc.key, city_name: doc.value});
-		        
-		      });
-		      res.send(JSON.stringify(result));
-    }
-		});
-		
-	});
-	
-/***************************************************************************************/
-//Retrieve All Additional Coverages
-/***************************************************************************************/ 
-
- app.get('/api/getAllCoverages', urlencodedParser, function (req, res) {
-	
-
-	coveragesdb.view('getAllCoverages', 'getAllCoverages', function(err, body)
-		{
-			if (!err) {
-		    var result = [];
-		      body.rows.forEach(function(doc) {
-		      	console.log("Doc from DB ", doc);
-		        result.push({coverage_id: doc.id, coverage_name: doc.key, coverage_value: doc.value.coverage_value});
-		        
-		      });
-		      res.send(JSON.stringify(result));
-    }
-		});
-		
-	});
-      				
-
-/***************************************************************************************/
-// Insertion of Final Quote
-/***************************************************************************************/ 
-
- app.put('/api/buyQuote', urlencodedParser,function (req, res) {
-	
-		console.log("Initial Request:", req.body);
-					 
-					
-					 var request = req.body;
-					  console.log("Inserting",request);
-		
-	
-	var manufacturer_name = request.manufacturer_name;
-	 console.log("Manufacturer Name",manufacturer_name);
-
-		vehiclesdb.view('retrieveVehicle', 'retrieveVehicle', {key : manufacturer_name} , function(err, body)
-		{
-			if (!err) {
-		
-		    
-		      body.rows.forEach(function(doc) {
-		      	console.log("Doc from DB ", doc);
-		      	if(request.model == doc.value.model_name)
-		      	{
-		      			console.log("Inserting into DB");
-		      			db.insert(request, function(err, data) {
-		      			console.log("Data from DB",data);
-						var id = data.id;
-						var rev = data.rev;
 						console.log("ID" , id);
 						var response = request;
 						response._id = id;
-						response._rev = rev;
 						console.log("Response", response);
 		  				res.end(JSON.stringify(response));
-								  				
-		      		
-		      	});
-		        
-	        }
-	        else
-	        {
-	        	
-	        	console.log("Invalid Vehicle details to calculate premium");
-	        	
-	        }
-						  				
+							
+					  });
+				
+				
+
+});
+
+
+		
+/***************************************************************************************/
+// Get Quote by emailID
+/***************************************************************************************/ 
+
+
+ app.get('/api/getQuoteByEmail/:client_id', urlencodedParser, function (req, res) {
+	
+	console.log("ClientID from Req", req.params.client_id);
+	
+	var client_id = req.params.client_id;
+
+	db.view('getQuoteByEmail', 'getQuoteByEmail', {key : client_id} , function(err, body)
+		{
+			if (!err) {
+		    var result = [];
+		      body.rows.forEach(function(doc) {
+		      	console.log("Doc from DB ", doc);
+		        result.push({client_id: doc.key, vehicle_name: doc.value.manufacturer_name});
 		        
 		      });
-		      
+		      res.send(JSON.stringify(result));
+    }
+		});
+		
+	});
+	
+	
+/***************************************************************************************/
+//Claim Search (Inquire Claim) 
+/***************************************************************************************/ 
+
+	 app.get('/api/searchClaim/:email_id', urlencodedParser, function (req, res) {
+		
+	
+	console.log("Parameters from request", req.params.email_id);
+	
+	var email_id = req.params.email_id;
+
+		claimSearchDB.view('searchClaim', 'searchClaim', {key : email_id} , function(err, body)
+		{
+			if (!err) {
+		    var result = [];
+		    
+		      body.rows.forEach(function(doc) {
+		      	console.log("Doc from DB ", doc);
+		        result.push({claim_id: doc.value.claim_id, submitted_on: doc.value.submitted_on, claim_amt: doc.value.claim_amt, status: doc.value.status});
+		        
+		        
+		      });
+		      res.send(JSON.stringify(result));
+		    
     }
 		});
 		
 	});
 		
+	
+	
