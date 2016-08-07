@@ -3,6 +3,6 @@ applications:
   memory: 256M
   instances: 1
   domain: au-syd.mybluemix.net
-  name: insureassist
-  host: insureassist
+  name: insureassistforclaims
+  host: insureassistforclaims
   disk_quota: 1024M
